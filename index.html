@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ff4f87;
+    font-family: Arial, sans-serif;
+  }
+  .box {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+  }
+  input {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+  }
+  button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    border-radius: 10px;
+    background: #ff2f6e;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="box" id="login">
+  <h2>Enter the password</h2>
+  <input id="pwd" type="password" placeholder="Type here">
+  <br>
+  <button onclick="check()">Enter</button>
+</div>
+
+<script>
+function check() {
+  const pass = document.getElementById("pwd").value;
+  if (pass === "20122025") {
+    window.location.href = "index.html";
+  } else {
+    alert("Wrong password!");
+  }
+}
+</script>
+
+</body>
+</html>

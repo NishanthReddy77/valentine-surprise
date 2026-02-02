@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Be My Valentine 💖</title>
+
+<style>
+@font-face {
+  font-family: 'HeartEverything';
+  src: url('TheHeartOfEverything.ttf');
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  background: radial-gradient(circle, #ff9abf, #ff4f87);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'HeartEverything', cursive;
+  overflow: hidden;
+}
+
+/* INTRO SCREEN */
+.intro {
+  position: fixed;
+  inset: 0;
+  background: #ff4f87;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 10;
+  animation: fadeIn 1.5s ease;
+}
+
+.intro h1 {
+  font-size: 3rem;
+  animation: pulse 2s infinite;
+}
+
+.intro p {
+  font-size: 1.4rem;
+  opacity: 0.9;
+}
+
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* MAIN CONTAINER */
+.container {
+  text-align: center;
+  padding: 40px;
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(14px);
+  border-radius: 30px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+  max-width: 420px;
+  width: 90%;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: 1s ease;
+}
+
+.container.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+h2 {
+  font-size: 2.8rem;
+  color: white;
+  text-shadow: 0 0 20px #ff2f6e;
+}
+
+.hint {
+  font-size: 1.2rem;
+  color: #ffe3ec;
+}
+
+/* BUTTONS */
+.buttons {
+  position: relative;
+  height: 120px;
+  margin-top: 20px;
+}
+
+button {
+  padding: 15px 35px;
+  font-size: 1.3rem;
+  border-radius: 40px;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  font-family: 'HeartEverything', cursive;
+}
+
+#yesBtn {
+  background: #ff2f6e;
+  color: white;
+  left: 50%;
+  transform: translateX(-120%);
+  box-shadow: 0 0 20px #ff2f6e;
+}
+
+#noBtn {
+  background: white;
+  color: #ff2f6e;
+  border: 2px solid #ff2f6e;
+  left: 50%;
+  transform: translateX(20%);
+}
+
+/* VIDEO */
+video {
+  display: none;
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 20px;
+  animation: videoIn 1s ease forwards;
+}
+
+@keyframes videoIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* HOLLOW HEARTS */
+.heart {
+  position: absolute;
+  font-size: 32px;
+  color: transparent;
+  -webkit-text-stroke: 2px #ffd1dc;
+  text-shadow: 0 0 15px #ff2f6e;
+  animation: float 7s linear infinite;
+}
+
+@keyframes float {
+  from { transform: translateY(100vh); opacity: 1; }
+  to { transform: translateY(-10vh); opacity: 0; }
+}
+
+/* EMOJI POP */
+.emoji {
+  position: absolute;
+  font-size: 34px;
+  animation: pop 1.2s ease forwards;
+}
+
+@keyframes pop {
+  from { transform: scale(0); opacity: 1; }
+  to { transform: scale(1.5) translateY(-120px); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- INTRO -->
+<div class="intro" id="intro">
+  <h1>Hey You 💕</h1>
+  <p>Tap anywhere…</p>
+</div>
+
+<audio id="music" loop>
+  <source src="music.mp3" type="audio/mp3">
+</audio>
+
+<div class="container" id="main">
+  <h2>Will you be my Valentine,<br>HER_NAME? 💘</h2>
+
+  <div class="hint">Choose wisely 😌</div>
+  <div class="hint">The NO button is naughty 👀</div>
+
+  <div class="buttons">
+    <button id="yesBtn">Yes 💖</button>
+    <button id="noBtn">No 🙃</button>
+  </div>
+
+  <video id="video" controls>
+    <source src="video.mp4" type="video/mp4">
+  </video>
+</div>
+
+<script>
+const intro = document.getElementById("intro");
+const main = document.getElementById("main");
+const music = document.getElementById("music");
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const video = document.getElementById("video");
+
+/* START EXPERIENCE */
+intro.addEventListener("click", () => {
+  intro.style.display = "none";
+  main.classList.add("show");
+  music.play();
+});
+
+/* NO BUTTON MOVE */
+function moveNo() {
+  const box = main.getBoundingClientRect();
+  noBtn.style.left = Math.random() * (box.width - noBtn.offsetWidth) + "px";
+  noBtn.style.top = Math.random() * (box.height - noBtn.offsetHeight - 120) + "px";
+}
+
+noBtn.addEventListener("mouseenter", moveNo);
+noBtn.addEventListener("click", moveNo);
+
+/* YES CLICK */
+yesBtn.addEventListener("click", () => {
+  yesBtn.style.display = "none";
+  noBtn.style.display = "none";
+  document.querySelector("h2").innerText = "YAY!!! 🥰💖";
+  popEmojis();
+  setTimeout(() => {
+    video.style.display = "block";
+    video.play();
+  }, 1200);
+});
+
+/* EMOJIS */
+function popEmojis() {
+  const emojis = ["💖","💘","😍","🥰","❤️"];
+  for(let i=0;i<30;i++){
+    const e = document.createElement("div");
+    e.className = "emoji";
+    e.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+    e.style.left = Math.random()*100+"vw";
+    e.style.top = Math.random()*100+"vh";
+    document.body.appendChild(e);
+    setTimeout(()=>e.remove(),1200);
+  }
+}
+
+/* HEARTS */
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerText="♡";
+  h.style.left=Math.random()*100+"vw";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),8000);
+},300);
+</script>
+
+</body>
+</html>
