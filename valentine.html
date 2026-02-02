@@ -21,7 +21,7 @@ body {
   overflow: hidden;
 }
 
-/* INTRO SCREEN */
+/* INTRO */
 .intro {
   position: fixed;
   inset: 0;
@@ -32,7 +32,6 @@ body {
   align-items: center;
   flex-direction: column;
   z-index: 10;
-  animation: fadeIn 1.5s ease;
 }
 
 .intro h1 {
@@ -40,22 +39,12 @@ body {
   animation: pulse 2s infinite;
 }
 
-.intro p {
-  font-size: 1.4rem;
-  opacity: 0.9;
-}
-
 @keyframes pulse {
   0%,100% { transform: scale(1); }
   50% { transform: scale(1.1); }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* MAIN CONTAINER */
+/* CONTAINER */
 .container {
   text-align: center;
   padding: 40px;
@@ -76,14 +65,14 @@ body {
 }
 
 h2 {
-  font-size: 2.8rem;
+  font-size: 2.6rem;
   color: white;
   text-shadow: 0 0 20px #ff2f6e;
 }
 
 .hint {
   font-family: Arial, sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #ffe3ec;
 }
 
@@ -96,7 +85,7 @@ h2 {
 
 button {
   padding: 15px 35px;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   border-radius: 40px;
   border: none;
   cursor: pointer;
@@ -109,7 +98,6 @@ button {
   color: white;
   left: 50%;
   transform: translateX(-120%);
-  box-shadow: 0 0 20px #ff2f6e;
 }
 
 #noBtn {
@@ -124,33 +112,13 @@ button {
 #videoContainer {
   display: none;
   margin-top: 20px;
-  width: 100%;
 }
 
 iframe {
   width: 100%;
   height: 360px;
-  border: none;
   border-radius: 20px;
-  animation: videoIn 1s ease forwards;
-}
-
-@keyframes videoIn {
-  from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-/* REPLAY BUTTON */
-#replayBtn {
-  display: none;
-  margin-top: 20px;
-  padding: 12px 30px;
-  background: #fff;
-  color: #ff2f6e;
-  border: 2px solid #ff2f6e;
-  border-radius: 30px;
-  font-family: Arial, sans-serif;
-  cursor: pointer;
+  border: none;
 }
 
 /* FINAL MESSAGE */
@@ -162,13 +130,12 @@ iframe {
   color: #ffe3ec;
 }
 
-/* HOLLOW HEARTS */
+/* HEARTS */
 .heart {
   position: absolute;
-  font-size: 32px;
+  font-size: 30px;
   color: transparent;
   -webkit-text-stroke: 2px #ffd1dc;
-  text-shadow: 0 0 15px #ff2f6e;
   animation: float 7s linear infinite;
 }
 
@@ -176,24 +143,11 @@ iframe {
   from { transform: translateY(100vh); opacity: 1; }
   to { transform: translateY(-10vh); opacity: 0; }
 }
-
-/* EMOJI POP */
-.emoji {
-  position: absolute;
-  font-size: 34px;
-  animation: pop 1.2s ease forwards;
-}
-
-@keyframes pop {
-  from { transform: scale(0); opacity: 1; }
-  to { transform: scale(1.5) translateY(-120px); opacity: 0; }
-}
 </style>
 </head>
 
 <body>
 
-<!-- INTRO -->
 <div class="intro" id="intro">
   <h1>Hey Nana 💕</h1>
   <p>Tap anywhere…</p>
@@ -207,27 +161,18 @@ iframe {
   <h2>Will you be my Valentine,<br>Roshini? 💘</h2>
 
   <div class="hint">Choose wisely 😌</div>
-  <div class="hint">The NO button is naughty 👀</div>
+  <div class="hint">NO is not really an option 👀</div>
 
   <div class="buttons">
     <button id="yesBtn">Yes 💖</button>
     <button id="noBtn">No 🙃</button>
   </div>
 
-  <!-- VIDEO (Hidden initially) -->
+  <!-- VIDEO -->
   <div id="videoContainer">
-    <iframe 
-      id="gdriveVideo"
-      src="https://drive.google.com/file/d/1dFIajxLT2ZRRerK4t_ss63DRmVpAI96-/preview"
-      allow="autoplay; encrypted-media" 
-      allowfullscreen>
-    </iframe>
+    <iframe id="gdriveVideo" allow="autoplay" allowfullscreen></iframe>
   </div>
 
-  <!-- REPLAY BUTTON -->
-  <button id="replayBtn">Replay 🎬</button>
-
-  <!-- FINAL MESSAGE -->
   <div id="finalMsg">I love you, Roshini 💖</div>
 </div>
 
@@ -237,88 +182,78 @@ const main = document.getElementById("main");
 const music = document.getElementById("music");
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
-
 const videoContainer = document.getElementById("videoContainer");
 const gdriveVideo = document.getElementById("gdriveVideo");
-const replayBtn = document.getElementById("replayBtn");
 const finalMsg = document.getElementById("finalMsg");
 
-/* START EXPERIENCE */
-intro.addEventListener("click", () => {
+let noCount = 0;
+
+/* START */
+intro.onclick = () => {
   intro.style.display = "none";
   main.classList.add("show");
   music.play();
-});
+};
 
-/* NO BUTTON MOVE */
+/* NO BUTTON LOGIC */
 function moveNo() {
   const box = main.getBoundingClientRect();
-  noBtn.style.left = Math.random() * (box.width - noBtn.offsetWidth) + "px";
-  noBtn.style.top = Math.random() * (box.height - noBtn.offsetHeight - 120) + "px";
+  noBtn.style.left = Math.random() * (box.width - 100) + "px";
+  noBtn.style.top = Math.random() * (box.height - 200) + "px";
 }
 
-noBtn.addEventListener("mouseenter", moveNo);
-noBtn.addEventListener("click", moveNo);
+noBtn.addEventListener("mouseenter", () => {
+  if (noCount < 2) moveNo();
+});
 
-/* YES CLICK */
-yesBtn.addEventListener("click", () => {
+noBtn.addEventListener("click", () => {
+  noCount++;
+
+  if (noCount === 2) {
+    noBtn.innerText = "Yes anyway 😏";
+    noBtn.style.background = "#ff2f6e";
+    noBtn.style.color = "white";
+    noBtn.style.border = "none";
+  } else if (noCount > 2) {
+    triggerYes();
+  } else {
+    moveNo();
+  }
+});
+
+/* YES */
+yesBtn.onclick = triggerYes;
+
+function triggerYes() {
   yesBtn.style.display = "none";
   noBtn.style.display = "none";
   document.querySelector("h2").innerText = "YAY!!! 🥰💖";
-  popEmojis();
 
   setTimeout(() => {
     videoContainer.style.display = "block";
-    videoContainer.style.animation = "videoIn 1s ease forwards";
+    gdriveVideo.src =
+      "https://drive.google.com/file/d/1dFIajxLT2ZRRerK4t_ss63DRmVpAI96-/preview?autoplay=1";
 
-    // autoplay in iframe
-    gdriveVideo.src = "https://drive.google.com/file/d/1dFIajxLT2ZRRerK4t_ss63DRmVpAI96-/preview?autoplay=1";
-
-    // show replay button after 3 seconds
-    setTimeout(() => {
-      replayBtn.style.display = "inline-block";
-    }, 3000);
-
-    // show final message exactly after 54 seconds
     setTimeout(() => {
       finalMsg.style.display = "block";
     }, 54000);
   }, 1200);
-});
-
-/* REPLAY */
-replayBtn.addEventListener("click", () => {
-  gdriveVideo.src = "https://drive.google.com/file/d/1dFIajxLT2ZRRerK4t_ss63DRmVpAI96-/preview?autoplay=1";
-  finalMsg.style.display = "none";
-});
-
-/* EMOJIS */
-function popEmojis() {
-  const emojis = ["💖","💘","😍","🥰","❤️"];
-  for(let i=0;i<30;i++){
-    const e = document.createElement("div");
-    e.className = "emoji";
-    e.innerText = emojis[Math.floor(Math.random()*emojis.length)];
-    e.style.left = Math.random()*100+"vw";
-    e.style.top = Math.random()*100+"vh";
-    document.body.appendChild(e);
-    setTimeout(()=>e.remove(),1200);
-  }
 }
 
 /* HEARTS */
-setInterval(()=>{
-  const h=document.createElement("div");
-  h.className="heart";
-  h.innerText="♡";
-  h.style.left=Math.random()*100+"vw";
+setInterval(() => {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.innerText = "♡";
+  h.style.left = Math.random() * 100 + "vw";
   document.body.appendChild(h);
-  setTimeout(()=>h.remove(),8000);
-},300);
+  setTimeout(() => h.remove(), 8000);
+}, 300);
 </script>
 
 </body>
 </html>
+
 
 
 
