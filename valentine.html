@@ -82,11 +82,10 @@ h2 {
 }
 
 .hint {
-  font-family: Arial, sans-serif;  /* Normal font */
+  font-family: Arial, sans-serif;
   font-size: 1.2rem;
   color: #ffe3ec;
 }
-
 
 /* BUTTONS */
 .buttons {
@@ -122,20 +121,45 @@ button {
 }
 
 /* VIDEO */
-video {
+#videoContainer {
   display: none;
   margin-top: 20px;
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 60vh;
-  border-radius: 20px;
+  width: 100%;
 }
 
+iframe {
+  width: 100%;
+  height: 360px;
+  border: none;
+  border-radius: 20px;
+  animation: videoIn 1s ease forwards;
+}
 
 @keyframes videoIn {
   from { opacity: 0; transform: scale(0.8); }
   to { opacity: 1; transform: scale(1); }
+}
+
+/* REPLAY BUTTON */
+#replayBtn {
+  display: none;
+  margin-top: 20px;
+  padding: 12px 30px;
+  background: #fff;
+  color: #ff2f6e;
+  border: 2px solid #ff2f6e;
+  border-radius: 30px;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+}
+
+/* FINAL MESSAGE */
+#finalMsg {
+  display: none;
+  margin-top: 20px;
+  font-family: Arial, sans-serif;
+  font-size: 1.4rem;
+  color: #ffe3ec;
 }
 
 /* HOLLOW HEARTS */
@@ -190,15 +214,21 @@ video {
     <button id="noBtn">No 🙃</button>
   </div>
 
- <iframe 
-  src="https://drive.google.com/file/d/1dFIajxLT2ZRRerK4t_ss63DRmVpAI96-/preview" 
-  width="100%" 
-  height="360" 
-  allow="autoplay; encrypted-media" 
-  allowfullscreen
-  style="border: none;">
-</iframe>
+  <!-- VIDEO (Hidden initially) -->
+  <div id="videoContainer">
+    <iframe 
+      id="gdriveVideo"
+      src="https://drive.google.com/file/d/1dFIajxLT2ZRRerK4t_ss63DRmVpAI96-/preview"
+      allow="autoplay; encrypted-media" 
+      allowfullscreen>
+    </iframe>
+  </div>
 
+  <!-- REPLAY BUTTON -->
+  <button id="replayBtn">Replay 🎬</button>
+
+  <!-- FINAL MESSAGE -->
+  <div id="finalMsg">I love you, Roshini 💖</div>
 </div>
 
 <script>
@@ -207,7 +237,11 @@ const main = document.getElementById("main");
 const music = document.getElementById("music");
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
-const video = document.getElementById("video");
+
+const videoContainer = document.getElementById("videoContainer");
+const gdriveVideo = document.getElementById("gdriveVideo");
+const replayBtn = document.getElementById("replayBtn");
+const finalMsg = document.getElementById("finalMsg");
 
 /* START EXPERIENCE */
 intro.addEventListener("click", () => {
@@ -232,10 +266,30 @@ yesBtn.addEventListener("click", () => {
   noBtn.style.display = "none";
   document.querySelector("h2").innerText = "YAY!!! 🥰💖";
   popEmojis();
+
   setTimeout(() => {
-    video.style.display = "block";
-    video.play();
+    videoContainer.style.display = "block";
+    videoContainer.style.animation = "videoIn 1s ease forwards";
+
+    // autoplay in iframe
+    gdriveVideo.src = "https://drive.google.com/file/d/1dFIajxLT2ZRRerK4t_ss63DRmVpAI96-/preview?autoplay=1";
+
+    // show replay button after 3 seconds
+    setTimeout(() => {
+      replayBtn.style.display = "inline-block";
+    }, 3000);
+
+    // show final message after 30 seconds (adjust based on video length)
+    setTimeout(() => {
+      finalMsg.style.display = "block";
+    }, 30000);
   }, 1200);
+});
+
+/* REPLAY */
+replayBtn.addEventListener("click", () => {
+  gdriveVideo.src = "https://drive.google.com/file/d/1dFIajxLT2ZRRerK4t_ss63DRmVpAI96-/preview?autoplay=1";
+  finalMsg.style.display = "none";
 });
 
 /* EMOJIS */
@@ -265,6 +319,7 @@ setInterval(()=>{
 
 </body>
 </html>
+
 
 
 
